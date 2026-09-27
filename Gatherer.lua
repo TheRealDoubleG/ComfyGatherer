@@ -54,7 +54,7 @@ function A:ShouldTrack(profession)
     return c.trackOther
 end
 
-function A:RecordLoot()
+function A:CaptureLootWindow()
     if not self.db or not self.db.enabled or type(ComfyData)~="table" or type(ComfyData.RecordGather)~="function" then return end
     if type(GetNumLootItems)~="function" or type(GetLootSlotLink)~="function" then return end
 
@@ -62,6 +62,7 @@ function A:RecordLoot()
     local zoneName=type(GetZoneText)=="function" and GetZoneText() or nil
     local visitID=tostring(Epoch())..":"..tostring(mapID or 0)..":"..string.format("%.4f",x or 0)..":"..string.format("%.4f",y or 0)
 
+    self.pendingLoot={}
     local count=tonumber(GetNumLootItems()) or 0
     for slot=1,count do
         local ok,link=pcall(GetLootSlotLink,slot)
@@ -84,13 +85,23 @@ function A:RecordLoot()
                     local values={pcall(GetLootSourceInfo,slot)}
                     if values[1] and tonumber(values[2]) and tonumber(values[2])>0 then sourceGUID=values[3] end
                 end
-                ComfyData:RecordGather({
+                self.pendingLoot[slot]={
                     itemID=itemID,itemName=name,quantity=quantity or 1,
                     profession=profession,category=category,sourceGUID=sourceGUID,
                     mapID=mapID,x=x,y=y,zoneName=zoneName,visitID=visitID,time=Epoch(),
-                })
+                }
             end
         end
+    end
+end
+
+function A:RecordLootSlot(slot)
+    if not self.pendingLoot then return end
+    local data=self.pendingLoot[tonumber(slot) or 0]
+    if not data then return end
+    self.pendingLoot[tonumber(slot) or 0]=nil
+    if type(ComfyData)=="table" and type(ComfyData.RecordGather)=="function" then
+        ComfyData:RecordGather(data)
     end
     self:RefreshFeature()
 end
@@ -240,9 +251,17 @@ function A:InitializeFeature()
     self:HookTooltips()
     local f=CreateFrame("Frame")
     self.eventFrame=f
-    for _,ev in ipairs({"LOOT_OPENED","PLAYER_ENTERING_WORLD","ZONE_CHANGED_NEW_AREA"}) do pcall(f.RegisterEvent,f,ev) end
-    f:SetScript("OnEvent",function(_,ev)
-        if ev=="LOOT_OPENED" then A:RecordLoot() else A:RefreshFeature() end
+    for _,ev in ipairs({"LOOT_OPENED","LOOT_SLOT_CLEARED","LOOT_CLOSED","PLAYER_ENTERING_WORLD","ZONE_CHANGED_NEW_AREA"}) do pcall(f.RegisterEvent,f,ev) end
+    f:SetScript("OnEvent",function(_,ev,arg)
+        if ev=="LOOT_OPENED" then
+            A:CaptureLootWindow()
+        elseif ev=="LOOT_SLOT_CLEARED" then
+            A:RecordLootSlot(arg)
+        elseif ev=="LOOT_CLOSED" then
+            A.pendingLoot=nil
+        else
+            A:RefreshFeature()
+        end
     end)
     f:SetScript("OnUpdate",function(self,elapsed)
         self.t=(self.t or 0)+(tonumber(elapsed) or 0)

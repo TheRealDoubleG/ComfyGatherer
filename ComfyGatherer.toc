@@ -3,7 +3,7 @@
 ## Notes: Personal gathering database and minimap tracker for professions and farming on WoW Forever.
 ## Notes-deDE: Persönliche Sammeldatenbank und Minimap-Tracker für Berufe und Farmen in WoW Forever.
 ## Author: TheRealDoubleG
-## Version: 0.3
+## Version: 0.4
 ## SavedVariables: ComfyGathererDB
 ## Dependencies: ComfyData
 ## X-ComfySuite: true

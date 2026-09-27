@@ -1,5 +1,9 @@
 # ComfyGatherer Changelog
 
+## 0.4 Beta – 28.09.2026
+- Registered ComfyGatherer in Blizzard's native AddOns settings list with a button to open the full Comfy settings window.
+
+
 ## 0.3 Beta – 28.09.2026
 - Switched from LOOT_OPENED counting to LOOT_SLOT_CLEARED confirmation.
 - Prevents abandoned/unlooted items from polluting the gathering database.

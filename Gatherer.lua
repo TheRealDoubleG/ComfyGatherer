@@ -198,7 +198,7 @@ function A:AddItemTooltip(tooltip,link)
     table.sort(zones,function(a,b) return (a.amount or 0)>(b.amount or 0) end)
     for i=1,math.min(3,#zones) do
         local zone=ComfyData:GetGatherStore().zones[tostring(zones[i].id)]
-        GameTooltip:AddDoubleLine(zone and zone.name or ("Map "..zones[i].id),tostring(zones[i].amount),0.8,0.8,0.8,1,1,1)
+        tooltip:AddDoubleLine(zone and zone.name or ("Map "..zones[i].id),tostring(zones[i].amount),0.8,0.8,0.8,1,1,1)
     end
 end
 

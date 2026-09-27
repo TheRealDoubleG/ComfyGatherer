@@ -1,6 +1,6 @@
 # ComfyGatherer
 
-**Version 0.3 – Beta**  
+**Version 0.4 – Beta**  
 **Target: World of Warcraft: Forever 1.60.1 / Interface 16001**
 
 Personal gathering database and minimap tracker for professions and farming on WoW Forever.

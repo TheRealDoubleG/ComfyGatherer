@@ -1,11 +1,16 @@
 # ComfyGatherer
 
-**Version 0.1 – Beta**  
+**Version 0.2 – Beta**  
 **Target: World of Warcraft: Forever 1.60.1 / Interface 16001**
 
 Personal gathering database and minimap tracker for professions and farming on WoW Forever.
 
 ComfyGatherer stores its observations through **ComfyData**, so the history survives replacing/updating the ComfyGatherer addon folder.
+
+## 0.2 Beta
+
+- Fixed gathering-history lines so they are added to the actual tooltip being processed.
+- Works with the ComfyData node-visit deduplication used for multi-item loot from one gathering action.
 
 ## 0.1 Beta
 

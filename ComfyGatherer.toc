@@ -1,0 +1,17 @@
+## Interface: 16001
+## Title: ComfyGatherer
+## Notes: Personal gathering database and minimap tracker for professions and farming on WoW Forever.
+## Notes-deDE: Persönliche Sammeldatenbank und Minimap-Tracker für Berufe und Farmen in WoW Forever.
+## Author: TheRealDoubleG
+## Version: 0.1
+## SavedVariables: ComfyGathererDB
+## Dependencies: ComfyData
+## X-ComfySuite: true
+## X-ComfyUI: 2
+## IconTexture: Interface\\Icons\\INV_Misc_Herb_07
+
+Locale.lua
+Core.lua
+SharedSettings.lua
+Gatherer.lua
+Options.lua

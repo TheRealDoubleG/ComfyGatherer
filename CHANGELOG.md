@@ -21,3 +21,9 @@
 - Added guarded minimap pin engine.
 - Added item-tooltip gathering history.
 - Added Comfy Suite profile/settings/info framework.
+
+## 0.6 (development)
+- Corrected GetLootSourceInfo return positions (guid1, quantity1) when
+  collecting loot-source metadata for ore/herb/skinning tracking.
+- Kept the source API optional; unavailable GUIDs do not suppress loot.
+- Added 18 mock loot-source and duplicate-cleared-slot checks (Lua 5.1/5.4).

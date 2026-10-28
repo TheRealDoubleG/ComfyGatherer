@@ -82,8 +82,13 @@ function A:CaptureLootWindow()
             if itemID and self:ShouldTrack(profession) then
                 local sourceGUID
                 if type(GetLootSourceInfo)=="function" then
-                    local values={pcall(GetLootSourceInfo,slot)}
-                    if values[1] and tonumber(values[2]) and tonumber(values[2])>0 then sourceGUID=values[3] end
+                    -- Blizzard: guid1, quantity1, guid2, quantity2, ...
+                    -- pcall adds success before those values.
+                    local okSource, guid, sourceQuantity = pcall(GetLootSourceInfo, slot)
+                    if okSource and type(guid)=="string"
+                        and tonumber(sourceQuantity) and tonumber(sourceQuantity)>0 then
+                        sourceGUID = guid
+                    end
                 end
                 self.pendingLoot[slot]={
                     itemID=itemID,itemName=name,quantity=quantity or 1,

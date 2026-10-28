@@ -23,6 +23,9 @@
 - Added Comfy Suite profile/settings/info framework.
 
 ## 0.6 (development)
+- Fix same-second consecutive loot-window visit IDs: a saved monotonic sequence prevents missed node visits across /reload.
+- Fix GetItemInfo fallback to use itemSubType instead of itemType when GetItemInfoInstant is absent.
+- Add 8 Lua 5.1/5.4 regression checks for visit IDs, item subtype and reload.
 - Corrected GetLootSourceInfo return positions (guid1, quantity1) when
   collecting loot-source metadata for ore/herb/skinning tracking.
 - Kept the source API optional; unavailable GUIDs do not suppress loot.

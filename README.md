@@ -28,3 +28,18 @@ ComfyGatherer stores its observations through **ComfyData**, so the history surv
 - /cgather stats prints database totals.
 
 World-map pins and a full searchable farming browser are planned after the minimap/loot path has been validated in the Forever client.
+
+## Source GUID fix (development)
+
+GetLootSourceInfo(slot) returns alternating GUID/quantity pairs; the
+previous code inspected the GUID as a number and often lost the source.
+The new code passes the first nonempty GUID to ComfyData if a positive
+source quantity exists. The API is optional. Together with the current
+ComfyData development version, the last loot-source kind can be inspected
+after /reload and compared to ore node gathers. Run:
+
+    lua5.1 tests/test_gather_source.lua .
+    lua5.4 tests/test_gather_source.lua .
+
+Live Forever-client verification remains necessary for event availability
+and genuine mining versus mob loot. No changes to release main branches.

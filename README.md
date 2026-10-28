@@ -43,3 +43,21 @@ after /reload and compared to ore node gathers. Run:
 
 Live Forever-client verification remains necessary for event availability
 and genuine mining versus mob loot. No changes to release main branches.
+
+## Accurate loot windows (development)
+
+A loot *window*, not a loot *slot*, is one node visit. Two loot windows can
+open in the same second at the same map coordinates; earlier we reused one
+visit ID and the second visit could disappear. ComfyGatherer now appends a
+monotonically increasing captureSequence stored in the gatherer profile.
+Slots from the same window share a visitID and separate windows differ, even
+after /reload. The GetItemInfo fallback now reads the actual itemSubType
+return value rather than itemType, so Mining/Herbalism classification can
+work with clients that do not expose GetItemInfoInstant.
+
+    lua5.1 tests/test_window_visits.lua .
+    lua5.4 tests/test_window_visits.lua .
+
+These are offline mock tests, not evidence of real WoW Forever client
+event behavior. We still need to confirm manually that an ore node counts
+correctly after /reload. Normal loot quantities are unaffected by this fix.

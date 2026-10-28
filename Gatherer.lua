@@ -35,7 +35,9 @@ local function DetectProfession(link)
         if ok then subtype=itemSubType end
     end
     if not subtype and type(GetItemInfo)=="function" then
-        local ok,_,_,_,_,_,sub=pcall(GetItemInfo,link)
+        -- GetItemInfo returns name, link, quality, level, minLevel,
+        -- itemType, itemSubType, ... ; pcall prepends a success value.
+        local ok,_,_,_,_,_,_,sub=pcall(GetItemInfo,link)
         if ok then subtype=sub end
     end
     local text=tostring(subtype or ""):lower()
@@ -60,7 +62,13 @@ function A:CaptureLootWindow()
 
     local mapID,x,y=CurrentPosition()
     local zoneName=type(GetZoneText)=="function" and GetZoneText() or nil
-    local visitID=tostring(Epoch())..":"..tostring(mapID or 0)..":"..string.format("%.4f",x or 0)..":"..string.format("%.4f",y or 0)
+    -- Each LOOT_OPENED window is a visit. Epoch() only has whole-second
+    -- resolution: two windows at the same coordinates may share one second.
+    -- Keep a monotonic sequence in the saved gather profile so /reload
+    -- cannot reuse the previous visit identifier.
+    local gatherSettings=self.db.gather
+    gatherSettings.captureSequence=(tonumber(gatherSettings.captureSequence) or 0)+1
+    local visitID=tostring(Epoch())..":"..tostring(mapID or 0)..":"..string.format("%.4f",x or 0)..":"..string.format("%.4f",y or 0)..":"..tostring(gatherSettings.captureSequence)
 
     self.pendingLoot={}
     local count=tonumber(GetNumLootItems()) or 0
